@@ -17,12 +17,14 @@ type Post struct {
 
 var db, err = sql.Open("mysql", "root:root@/golang?charset=utf8")
 
-func main() {
-	stmt, err := db.Prepare("Insert into posts(title, body) values(?,?)")
-	checkErr(err)
+// CREATE TABLE POSTS (ID INT(6) AUTO_INCREMENT PRIMARY KEY, TITLE VARCHAR(50), BODY TEXT);
 
-	_, err = stmt.Exec("My First Post", "My first content")
-	checkErr(err)
+func main() {
+	// stmt, err := db.Prepare("INSERT INTO POSTS(TITLE, BODY) VALUES (?,?)")
+	// checkErr(err)
+
+	// _, err = stmt.Exec("My First Post 2", "My first content 2")
+	// checkErr(err)
 
 	r := mux.NewRouter()
 	r.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(http.Dir("static/"))))
@@ -34,7 +36,7 @@ func main() {
 }
 
 func ListPosts() []Post {
-	rows, err := db.Query("Select * from posts")
+	rows, err := db.Query("SELECT * FROM POSTS")
 	checkErr(err)
 
 	items := []Post{}
@@ -48,7 +50,7 @@ func ListPosts() []Post {
 }
 
 func GetPostById(id string) Post {
-	row := db.QueryRow("select * from posts where id=?", id)
+	row := db.QueryRow("SELECT * FROM POSTS WHERE ID=?", id)
 	post := Post{}
 	row.Scan(&post.Id, &post.Title, &post.Body)
 	return post
